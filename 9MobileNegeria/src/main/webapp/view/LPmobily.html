@@ -1,0 +1,229 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="p-0">
+    <!--banner-section-->
+
+    <section class="position-relative bg_0 py_5">
+        <!-- <img src="images/bckground_004.png" class="img-fluid bckground_000 d-block w-100"> -->
+        <div class="banner">
+            <div class="container-fluid">
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <img src="${pageContext.request.contextPath}/images/quizwheel.png" class="img-fluid  d-block" alt="spin_0">
+                    </div>
+                    <div class="col-md-4 my-auto">
+                        <img src="${pageContext.request.contextPath}/images/logo.png" class="img-fluid d-block mx-auto logo_0" alt="logo_0">
+                        <img src="${pageContext.request.contextPath}/images/quote.png" class="img-fluid d-block mx-auto txt_0 " alt="text">
+                        <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number">
+
+                        <button type="button" class="btn d-block mx-auto btn_0 mt-4">Subscribe</button>
+                        <p class=" phra_0  d-block mx-auto  py-2">Service price 240 IQD Daily </p>
+                    </div>
+                    <div class="col-md-3 mt-5">
+                        <img src="${pageContext.request.contextPath}/images/girl_1.png" class="img-fluid d-block girl_0" alt="girl_0">
+
+                    </div>
+                </div>
+
+                <span class="phra_0">
+                    <p class="text-center">service for Zain Iraq is an exciting trivia quiz game. Service
+                        price (240 IQD) and user will receive a daily message . To Unsubscribe send 0 to 4540 </p>
+                </span>
+                <div class="wdt_8 d-flex justify-content-center mt-5">
+                    <a class="d-block" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="${pageContext.request.contextPath}/images/0101.gif" class="img-fluid d-block"></a>
+                    <a class="d-block mx-4" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal_1"><img src="${pageContext.request.contextPath}/images/020202.gif" class="img-fluid d-block"></a>
+                    <a class="d-block" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal_2"><img src="${pageContext.request.contextPath}/images/0303.gif" class="img-fluid d-block"></a>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+
+
+
+
+
+    <!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button> -->
+  
+  <!-- Modal -->
+  <div class="modal modal_1 fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center w-100">
+            <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img1.png"></a>
+            <a class="d-block w-100 mx-4"><img class="img-fluid d-block w-100" src="images/logo.png"></a>
+            <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img2.png"></a>
+            </div>
+          <button type="button" class="btn-close align-self-start m-0 p-0 ms-4" data-bs-dismiss="modal" aria-label="Close">
+            <img class="img-fluid d-block" src="images/close.png">
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-6 d-flex flex-column">
+                    <h4 class="m-0 text-white text-capitalize text-center">Level 9</h4>
+                    <div class="mdl_bx d-flex flex-column h-100 p-3 mt-2">
+                        <h5 class="text-center">World | 2/3</h5>
+                        <div class="d-flex flex-column h-100">
+                          <span class="d-block w-100 text-center my-auto">In which country, Yellowstone National Park is located?</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <p class="text-capitalize">Select your Answer</p>
+                        <span class="d-block spn_count ms-3">0.00</span>
+                    </div>
+                    <ul class="nav_8 mt-2">
+                      <li><a href="" class="d-block">russia</a></li>
+                      <li class="my-2"><a href="" class="d-block">canada</a></li>
+                      <li><a href="" class="d-block">brazil</a></li>
+                      <li class="mt-2"><a href="" class="d-block">USA</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-warning">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal modal_1 fade" id="exampleModal_1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex align-items-center w-100">
+              <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img1.png"></a>
+              <a class="d-block w-100 mx-4"><img class="img-fluid d-block w-100" src="images/logo.png"></a>
+              <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img2.png"></a>
+              </div>
+            <button type="button" class="btn-close align-self-start m-0 p-0 ms-4" data-bs-dismiss="modal" aria-label="Close">
+              <img class="img-fluid d-block" src="images/close.png">
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-6 d-flex flex-column">
+                      <h4 class="m-0 text-white text-capitalize text-center">Level 9</h4>
+                      <div class="mdl_bx d-flex flex-column h-100 p-3 mt-2">
+                          <h5 class="text-center">World | 2/3</h5>
+                          <div class="d-flex flex-column h-100">
+                            <span class="d-block w-100 text-center my-auto">In which country, Yellowstone National Park is located?</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex justify-content-center align-items-center">
+                          <p class="text-capitalize">Select your Answer</p>
+                          <span class="d-block spn_count ms-3">0.00</span>
+                      </div>
+                      <ul class="nav_8 mt-2">
+                        <li><a href="" class="d-block">russia</a></li>
+                        <li class="my-2"><a href="" class="d-block">canada</a></li>
+                        <li><a href="" class="d-block">brazil</a></li>
+                        <li class="mt-2"><a href="" class="d-block">USA</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-warning">Save changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+
+
+  <div class="modal modal_1 fade" id="exampleModal_2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex align-items-center w-100">
+              <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img1.png"></a>
+              <a class="d-block w-100 mx-4"><img class="img-fluid d-block w-100" src="images/logo.png"></a>
+              <a class="d-block w-100"><img class="img-fluid d-block w-100" src="images/popup-img2.png"></a>
+              </div>
+            <button type="button" class="btn-close align-self-start m-0 p-0 ms-4" data-bs-dismiss="modal" aria-label="Close">
+              <img class="img-fluid d-block" src="images/close.png">
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-6 d-flex flex-column">
+                      <h4 class="m-0 text-white text-capitalize text-center">Level 9</h4>
+                      <div class="mdl_bx d-flex flex-column h-100 p-3 mt-2">
+                          <h5 class="text-center">World | 2/3</h5>
+                          <div class="d-flex flex-column h-100">
+                            <span class="d-block w-100 text-center my-auto">In which country, Yellowstone National Park is located?</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="d-flex justify-content-center align-items-center">
+                          <p class="text-capitalize">Select your Answer</p>
+                          <span class="d-block spn_count ms-3">0.00</span>
+                      </div>
+                      <ul class="nav_8 mt-2">
+                        <li><a href="" class="d-block">russia</a></li>
+                        <li class="my-2"><a href="" class="d-block">canada</a></li>
+                        <li><a href="" class="d-block">brazil</a></li>
+                        <li class="mt-2"><a href="" class="d-block">USA</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-warning">Save changes</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+
+
+
+
+
+
+
+    <!--x-banner-section-x-->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
