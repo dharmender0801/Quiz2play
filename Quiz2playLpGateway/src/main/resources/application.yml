@@ -1,0 +1,35 @@
+server:
+  port: 9096
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+      routes:
+      - id: 9MOBILE-NIGERIA  
+        uri: lb://9MOBILE-NIGERIA
+        predicates:
+        - Path=/9mobile/**
+      - id: css-route
+        uri: "lb://9MOBILE-NIGERIA/css/"
+        predicates:
+        - Path=/css/**
+      - id: images-route
+        uri: "lb://9MOBILE-NIGERIA/images/" 
+        predicates:
+        - Path=/images/**
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true  
+    service-url:
+      defaultZone: http://192.168.48.25:5005/eureka    
