@@ -1,0 +1,26 @@
+server:
+  port: 9096
+spring:
+  application:
+    name: API-GATEWAY-BILLING
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+      routes:
+       - uri: http://<IP_ADDRESS>:<PORT>/css/ 
+         predicates:
+         - Path=/9mobile/**
+eureka:       
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true  
+    service-url:
+      defaultZone: http://192.168.48.25:5005/eureka    
