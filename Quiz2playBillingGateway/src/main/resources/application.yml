@@ -1,5 +1,5 @@
 server:
-  port: 9096
+  port: 5006
 spring:
   application:
     name: API-GATEWAY-BILLING
@@ -13,9 +13,23 @@ spring:
               allowedOrigins: "*"
               allowedMethods: "*"
       routes:
-       - uri: http://<IP_ADDRESS>:<PORT>/css/ 
-         predicates:
-         - Path=/9mobile/**
+        - id: kenya_route
+          uri: http://192.168.48.25:5001/
+          predicates:
+            - Path=/api/kenya/**
+        - id: orange_burkina_route
+          uri: http://192.168.48.25:5001/
+          predicates:
+            - Path=/api/orange-burkina/**
+        - id: zain_iraq_route
+          uri: http://192.168.48.25:5001/
+          predicates:
+            - Path=/api/zain-iraq/**
+        - id: ksa_route
+          uri: http://192.168.48.25:5001/
+          predicates:
+            - Path=/api/ksa/**
+         
 eureka:       
   instance:
     prefer-ip-address: true
