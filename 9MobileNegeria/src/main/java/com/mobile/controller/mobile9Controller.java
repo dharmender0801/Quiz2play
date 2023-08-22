@@ -1,6 +1,5 @@
 package com.mobile.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,10 +34,17 @@ public class mobile9Controller {
 				proModel.getProductId());
 		return response ? "9mobile" : "";
 	}
-	
-//	public String Redirection(Model model, HttpServletRequest request, HttpServletResponse response)
-//	{
-//		return null;
-//	}
+
+	@GetMapping("/redirect")
+	public String Redirection(Model model, HttpServletRequest request, HttpServletResponse response) {
+
+		return null;
+	}
+
+	@GetMapping("/redirection")
+	public String backRedirection(@RequestParam String status, @RequestParam String token, @RequestParam String kpId) {
+
+		return null;
+	}
 
 }

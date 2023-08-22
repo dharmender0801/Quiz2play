@@ -32,10 +32,9 @@ public class LpServiceImpl implements LpService {
 			if (isActiveLpAdv != null) {
 				model.addAttribute("kpId", kpId);
 				model.addAttribute("cpId", cpId);
-				model.addAttribute("packageId", productId);
+				model.addAttribute("productId", productId);
 				InetAddress IP = InetAddress.getLocalHost();
 				System.out.println(IP.toString());
-				System.out.println(cpId);
 				Quiz2playLpTransaction lpTranModel = new Quiz2playLpTransaction();
 				lpTranModel.setAdvId(cpId);
 				lpTranModel.setPubId(pubId);

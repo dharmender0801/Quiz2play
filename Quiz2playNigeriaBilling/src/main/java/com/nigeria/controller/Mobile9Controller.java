@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nigeria.request.NotificationRequest;
+import com.nigeria.request.SubscriptionRequest;
 import com.nigeria.response.StatusResponse;
 import com.nigeria.service.Mobile9Service;
 
@@ -29,4 +30,10 @@ public class Mobile9Controller {
 	public ResponseEntity<StatusResponse> notifications(@RequestBody String notificationRequest) {
 		return new ResponseEntity<StatusResponse>(mobile9Service.saveNotification(notificationRequest), HttpStatus.OK);
 	}
+
+	@PostMapping("subscription")
+	public ResponseEntity<StatusResponse> sendSubscriptionRequest(@RequestBody SubscriptionRequest body) {
+		return new ResponseEntity<StatusResponse>(mobile9Service.sendSubscription(body), HttpStatus.OK);
+	}
+
 }

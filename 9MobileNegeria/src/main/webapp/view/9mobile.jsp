@@ -16,80 +16,81 @@
 
     <body class="p-0">
         <!--banner-section-->
-
-        <section class="position-relative flex-column bg_1 p-3" id="nigeria_banner">
-            <!-- <img src="images/bckground_000-01.png" class="img-fluid bckground_000 d-block w-100"> -->
-            <!-- <div class="banner"> -->
-            <div class="d-flex align-items-center" style="position: relative; z-index:9;">
-                <div class="m-0 p-0 banner text-white text-center w-100 mx-auto" style="font-size: 17px;">Beat the clock
-                    in 30 seconds & answer the multiple choice text based question for top score!
+        <form action="/redirect", method="get">
+            <section class="position-relative flex-column bg_1 p-3" id="nigeria_banner">
+                <!-- <img src="images/bckground_000-01.png" class="img-fluid bckground_000 d-block w-100"> -->
+                <!-- <div class="banner"> -->
+                <div class="d-flex align-items-center" style="position: relative; z-index:9;">
+                    <div class="m-0 p-0 banner text-white text-center w-100 mx-auto" style="font-size: 17px;">Beat the
+                        clock
+                        in 30 seconds & answer the multiple choice text based question for top score!
+                    </div>
+                    <img src="${pageContext.request.contextPath}/images/download (1).png"
+                        class="img-fluid d-block mx-auto logo_0 nine_logo my-auto ms-3" alt="logo_0"
+                        style="width:105px; flex:0 0 auto;">
                 </div>
-                <img src="${pageContext.request.contextPath}/images/download (1).png"
-                    class="img-fluid d-block mx-auto logo_0 nine_logo my-auto ms-3" alt="logo_0"
-                    style="width:105px; flex:0 0 auto;">
-            </div>
-            <input type="hidden" value="${kpId}" name="kpId">
-            <input type="hidden" value="${language}" name="language">
-            <input type="hidden" value="${productId}" name="productId">
-            <input type="hidden" value="${cpId}" name="cpId">
-            <input type="hidden" value="${pubId}" name="pubId">
-            <div class="container-fluid mt-5 mb-auto" style="position: relative; z-index:9;">
-                <!-- <div class="container-fluid"> -->
+                <input type="hidden" value="${kpId}" name="kpId">
+                <input type="hidden" value="${language}" name="language">
+                <input type="hidden" value="${productId}" name="productId">
+                <input type="hidden" value="${cpId}" name="cpId">
+                <input type="hidden" value="${pubId}" name="pubId">
+                <div class="container-fluid mt-5 mb-auto" style="position: relative; z-index:9;">
+                    <!-- <div class="container-fluid"> -->
 
-                <div class="row justify-content-between">
-                    <div class="col-md-5 col-7 order-md-0 order-1 my-auto">
-                        <img src="${pageContext.request.contextPath}/images/10666.png" class="img-fluid  d-block"
-                            alt="spin_0">
+                    <div class="row justify-content-between">
+                        <div class="col-md-5 col-7 order-md-0 order-1 my-auto">
+                            <img src="${pageContext.request.contextPath}/images/10666.png" class="img-fluid  d-block"
+                                alt="spin_0">
+                        </div>
+                        <div class="col-md-4 my-auto">
+                            <img src="${pageContext.request.contextPath}/images/logo.png"
+                                class="img-fluid d-block mx-auto logo_0" alt="logo_0">
+
+                            <img src="${pageContext.request.contextPath}/images/quote.png"
+                                class="img-fluid d-block mx-auto txt_0 " alt="text">
+                            <!-- <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number"> -->
+
+                            <button type="submit" class="btn d-block mx-auto btn_0">Subscribe</button>
+                            <p class=" phra_0  d-block mx-auto my-2">${msg1}</p>
+                            <p class="text-white text-center m-0 p-0">${msg2}</p>
+                        </div>
+                        <div class="col-md-3 col-5 mt-auto order-2">
+                            <img src="${pageContext.request.contextPath}/images/8357600.png"
+                                class="img-fluid d-block girl_0" alt="girl_0">
+
+                        </div>
                     </div>
-                    <div class="col-md-4 my-auto">
-                        <img src="${pageContext.request.contextPath}/images/logo.png"
-                            class="img-fluid d-block mx-auto logo_0" alt="logo_0">
-
-                        <img src="${pageContext.request.contextPath}/images/quote.png"
-                            class="img-fluid d-block mx-auto txt_0 " alt="text">
-                        <!-- <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number"> -->
-
-                        <button type="button" class="btn d-block mx-auto btn_0">Subscribe</button>
-                        <p class=" phra_0  d-block mx-auto my-2">${msg1}</p>
-                        <p class="text-white text-center m-0 p-0">${msg2}</p>
-                    </div>
-                    <div class="col-md-3 col-5 mt-auto order-2">
-                        <img src="${pageContext.request.contextPath}/images/8357600.png"
-                            class="img-fluid d-block girl_0" alt="girl_0">
-
-                    </div>
-                </div>
-                <!-- <footer class="row justify-content-center"> -->
-                <!-- <div class="col-md-5 col-6 d-md-block d-none order-md-0 order-1 my-auto">
+                    <!-- <footer class="row justify-content-center"> -->
+                    <!-- <div class="col-md-5 col-6 d-md-block d-none order-md-0 order-1 my-auto">
   </div> -->
-                <!-- <div class="col-md-4"> -->
-                <p class="phra_0 email_para text-end d-block mx-auto mt-2"><b style="font-size: 18px;">Support
-                        email:</b> Nextgen@altruistindia.com</p>
+                    <!-- <div class="col-md-4"> -->
+                    <p class="phra_0 email_para text-end d-block mx-auto mt-2"><b style="font-size: 18px;">Support
+                            email:</b> Nextgen@altruistindia.com</p>
 
-                <!-- </div> -->
-                <!-- <div class="col-md-3 col-6 d-md-block d-none mt-auto order-2">
+                    <!-- </div> -->
+                    <!-- <div class="col-md-3 col-6 d-md-block d-none mt-auto order-2">
 </div> -->
-                <!-- </footer> -->
+                    <!-- </footer> -->
 
 
-                <!-- <span class="phra_0">
+                    <!-- <span class="phra_0">
                     <p class="text-center">Quiz2Play service for Zain Iraq is an exciting trivia quiz game. Service
                         price (240 IQD) and user will receive a daily message . To Unsubscribe send 0 to 4540 </p>
                 </span> -->
-                <!-- <div class="wdt_8 d-flex justify-content-center mt-5">
+                    <!-- <div class="wdt_8 d-flex justify-content-center mt-5">
                     <a class="d-block" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="images/0101.gif" class="img-fluid d-block"></a>
                     <a class="d-block mx-4" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal_1"><img src="images/020202.gif" class="img-fluid d-block"></a>
                     <a class="d-block" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal_2"><img src="images/0303.gif" class="img-fluid d-block"></a>
                 </div> -->
+                    <!-- </div> -->
+
+
+                </div>
+                <div id="overlay_div"></div>
                 <!-- </div> -->
+            </section>
 
-
-            </div>
-            <div id="overlay_div"></div>
-            <!-- </div> -->
-        </section>
-
-
+        </form>
 
 
 
