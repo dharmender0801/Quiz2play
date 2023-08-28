@@ -28,23 +28,29 @@ public class mobile9Controller {
 			@RequestParam(value = "cpId", required = false, defaultValue = "0") String cpId,
 			@RequestParam(value = "kpId", required = false, defaultValue = "0") String kpId,
 			@RequestParam(value = "pubId", required = false, defaultValue = "0") String pubId,
-			@RequestParam(value = "language", required = false, defaultValue = "en") String language) {
+			@RequestParam(value = "language", required = false, defaultValue = "en") String language,
+			@RequestHeader String Host) {
 		PromotionTypeModel proModel = promotionService.GetPromo("106", model);
 		Boolean response = lpService.SaveToTransaction(userAgent, model, cpId, kpId, pubId, language,
 				proModel.getProductId());
+		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, proModel.getProductId(), language, Host);
 		return response ? "9mobile" : "";
 	}
 
 	@GetMapping("/redirect")
-	public String Redirection(Model model, HttpServletRequest request, HttpServletResponse response) {
-
-		return null;
+	public String Redirection(@RequestHeader String Host, @RequestParam String kpId, @RequestParam String pubId,
+			@RequestParam String productId, @RequestParam String language) {
+		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, productId, language, Host);
+		System.out.println(redirectionUrl);
+		return "redirect:" + redirectionUrl;
 	}
 
-	@GetMapping("/redirection")
-	public String backRedirection(@RequestParam String status, @RequestParam String token, @RequestParam String kpId) {
-
-		return null;
+	@GetMapping("/9mobile/redirection")
+	public String backRedirection(@RequestParam String status, @RequestParam String token, @RequestParam String kpId,
+			@RequestParam String language, @RequestParam String productId,
+			@RequestParam(value = "msisdn", required = false, defaultValue = "0") String msisdn) {
+		String response = lpService.sendSubscriptionRequest(status,token,kpId,language,productId,msisdn);
+		return "9mobilesucess";
 	}
 
 }

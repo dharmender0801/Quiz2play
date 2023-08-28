@@ -6,6 +6,7 @@ import lombok.Data;
 public class SubscriptionRequest {
 
 	private String msisdn;
+	private String token;
 	private String productId;
 	private String advId;
 	private String channel;

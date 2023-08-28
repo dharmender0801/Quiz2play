@@ -17,6 +17,10 @@ spring:
         uri: lb://9MOBILE-NIGERIA
         predicates:
         - Path=/9mobile/**
+      - id: 9MOBILE-NIGERIA  
+        uri: lb://9MOBILE-NIGERIA
+        predicates:
+        - Path=/redirect/**
       - id: css-route
         uri: "lb://9MOBILE-NIGERIA/css/"
         predicates:
@@ -25,6 +29,49 @@ spring:
         uri: "lb://9MOBILE-NIGERIA/images/" 
         predicates:
         - Path=/images/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/burkina/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/kenya/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/stc-ksa/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/ksa/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/zain-ksa/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/mobily-ksa/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/upload/**
+      - id: kenya_route
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/subscription/**
+      - id: zain_iq
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/zain-iraq/**
+        
+        
+                
+      - id: inaap
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/api/v1/**
 eureka:
   instance:
     prefer-ip-address: true
