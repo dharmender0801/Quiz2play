@@ -31,25 +31,31 @@ public class mobile9Controller {
 			@RequestParam(value = "language", required = false, defaultValue = "en") String language,
 			@RequestHeader String Host) {
 		PromotionTypeModel proModel = promotionService.GetPromo("106", model);
+		long requestId = (long) (Math.random() * 100000000000000L);
 		Boolean response = lpService.SaveToTransaction(userAgent, model, cpId, kpId, pubId, language,
-				proModel.getProductId());
-		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, proModel.getProductId(), language, Host);
+				proModel.getProductId(),requestId);
+		
+		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, proModel.getProductId(), language,String.valueOf(requestId));
 		return response ? "9mobile" : "";
 	}
 
-	@GetMapping("/redirect")
-	public String Redirection(@RequestHeader String Host, @RequestParam String kpId, @RequestParam String pubId,
-			@RequestParam String productId, @RequestParam String language) {
-		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, productId, language, Host);
+	@GetMapping("/9mobile/redirect")
+	public String Redirection(HttpServletRequest request, HttpServletResponse response) {
+		String redirectionUrl = lpService.getRedirectionURl(request.getParameter("kpId"), request.getParameter("pubId"),
+				request.getParameter("productId"), request.getParameter("language"),request.getParameter("transactionId"));
 		System.out.println(redirectionUrl);
 		return "redirect:" + redirectionUrl;
 	}
 
 	@GetMapping("/9mobile/redirection")
-	public String backRedirection(@RequestParam String status, @RequestParam String token, @RequestParam String kpId,
-			@RequestParam String language, @RequestParam String productId,
-			@RequestParam(value = "msisdn", required = false, defaultValue = "0") String msisdn) {
-		String response = lpService.sendSubscriptionRequest(status,token,kpId,language,productId,msisdn);
+	public String backRedirection(@RequestParam(required = false ) String  status, @RequestParam(required = false ) String token, @RequestParam(required = false ) String kpId,
+			@RequestParam(required = false ) String language, @RequestParam(required = false ) String productId,
+			@RequestParam(value = "msisdn", required = false, defaultValue = "0") String msisdn,
+			@RequestParam String transactionId
+			
+			) {
+		System.out.println("Token - : :  "+token);
+		String response = lpService.sendSubscriptionRequest(status, token, kpId, language, productId, msisdn,transactionId);
 		return "9mobilesucess";
 	}
 

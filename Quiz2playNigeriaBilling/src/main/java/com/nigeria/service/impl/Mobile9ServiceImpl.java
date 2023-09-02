@@ -61,18 +61,23 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 
 	@Override
 	public StatusResponse sendSubscription(SubscriptionRequest body) {
+		StatusResponse status = new StatusResponse();
 		try {
-			String url = " https://api.sla-alacrity.com/v2.2/subscription/create?msisdn=" + body.getMsisdn()
+			String url = " https://api.sla-alacrity.com/v2.2/subscription/create?msisdn=" + body.getToken()
 					+ "&campaign=campaign:20b1b06bcf116d2388b84870a78ca4beb7fed222&merchant"
 					+ "=partner:29905e4f22cc93f337652a554165d60bf637b8ed&trial=0&language=en&trial_once=false";
 			String response = HttpUtils.sendRequest(url);
 			helper.saveSubscriptionRequest(body, response, url);
 			System.out.println(response);
+			status.setDescripttion("Success");
+			status.setStatusCode(200);
 		} catch (Exception e) {
+			status.setDescripttion("Internal Server Error !");
+			status.setStatusCode(500);
 			e.printStackTrace();
 		}
 
-		return null;
+		return status;
 	}
 
 }

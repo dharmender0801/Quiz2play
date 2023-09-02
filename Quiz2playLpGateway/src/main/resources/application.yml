@@ -36,7 +36,7 @@ spring:
       - id: kenya_route
         uri: http://192.168.48.25:9094/
         predicates:
-        - Path=/kenya/**
+        - Path=/kenya/**   
       - id: kenya_route
         uri: http://192.168.48.25:9094/
         predicates:
@@ -65,9 +65,14 @@ spring:
         uri: http://192.168.48.25:9094/
         predicates:
         - Path=/zain-iraq/**
-        
-        
-                
+      - id: zain_iq
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/failed/**
+      - id: zain_iq
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/success/**
       - id: inaap
         uri: http://192.168.48.25:9094/
         predicates:

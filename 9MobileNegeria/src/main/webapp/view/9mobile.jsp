@@ -16,7 +16,7 @@
 
     <body class="p-0">
         <!--banner-section-->
-        <form action="/redirect", method="get">
+        <form action="/9mobile/redirect", method="get">
             <section class="position-relative flex-column bg_1 p-3" id="nigeria_banner">
                 <!-- <img src="images/bckground_000-01.png" class="img-fluid bckground_000 d-block w-100"> -->
                 <!-- <div class="banner"> -->
@@ -33,7 +33,9 @@
                 <input type="hidden" value="${language}" name="language">
                 <input type="hidden" value="${productId}" name="productId">
                 <input type="hidden" value="${cpId}" name="cpId">
+                <input type="hidden" value="${cpId}" name="cpId">
                 <input type="hidden" value="${pubId}" name="pubId">
+                <input type="hidden" value="${transactionId}" name="transactionId">
                 <div class="container-fluid mt-5 mb-auto" style="position: relative; z-index:9;">
                     <!-- <div class="container-fluid"> -->
 
