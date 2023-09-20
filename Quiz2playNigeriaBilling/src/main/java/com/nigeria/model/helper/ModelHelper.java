@@ -6,9 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nigeria.model.PartnerNoticationRequest;
+import com.nigeria.model.ProductConfigModel;
+import com.nigeria.model.SubscriptionModel;
 import com.nigeria.model.SubscriptionRequestModel;
+import com.nigeria.model.TblBillingLogs;
+import com.nigeria.model.TblBillingSuccess;
 import com.nigeria.repos.PartnerNotificationRepo;
+import com.nigeria.repos.SubscriptionRepos;
 import com.nigeria.repos.SubscriptionRequestRepos;
+import com.nigeria.repos.TblBillingLogsRepo;
+import com.nigeria.repos.TblBillingSuccessRepo;
 import com.nigeria.request.SubscriptionRequest;
 
 @Component
@@ -16,11 +23,17 @@ public class ModelHelper {
 
 	@Autowired
 	private PartnerNotificationRepo notificationRepo;
-
 	@Autowired
 	private SubscriptionRequestRepos subRequestRepo;
+	@Autowired
+	private SubscriptionRepos subscriptionRepo;
+	@Autowired
+	private TblBillingLogsRepo billingLogsRepo;
+	@Autowired
+	private TblBillingSuccessRepo billingSuccessRepo;
 
-	public void saveSubscriptionRequest(SubscriptionRequest body, String response, String url) {
+	public SubscriptionRequestModel saveSubscriptionRequest(SubscriptionRequest body, String response, String url,
+			String msisdn) {
 		// TODO Auto-generated method stub
 
 		SubscriptionRequestModel subscriptionRequestModel = new SubscriptionRequestModel();
@@ -33,13 +46,14 @@ public class ModelHelper {
 			subscriptionRequestModel.setPartnerTransactionId(body.getPartnerTransactionId());
 			subscriptionRequestModel.setTransactionId("0");
 			subscriptionRequestModel.setLanguage(body.getLanguage());
-			subscriptionRequestModel.setMsisdn(body.getMsisdn());
+			subscriptionRequestModel.setMsisdn(msisdn);
 			subscriptionRequestModel.setPinPushRequest(url);
 			subscriptionRequestModel.setPortalId("106");
 			subRequestRepo.save(subscriptionRequestModel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return subscriptionRequestModel;
 
 	}
 
@@ -55,6 +69,96 @@ public class ModelHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	public SubscriptionModel saveintosubscription(String msisdn, SubscriptionRequestModel subscriptionRequest,
+			ProductConfigModel productConfig) {
+		SubscriptionModel subModel = new SubscriptionModel();
+		try {
+			subModel.setActiveStatus(1);
+			subModel.setAdvId(subscriptionRequest.getAdvId());
+			subModel.setAmount(productConfig.getPricePoint());
+			subModel.setChannel(subscriptionRequest.getChannel());
+			subModel.setCurrency(productConfig.getCurrency());
+			subModel.setLanguage(subscriptionRequest.getLanguage());
+			subModel.setMappedItemtypeId(productConfig.getPricePoint());
+			subModel.setMsisdn(msisdn);
+			subModel.setPortalId(subscriptionRequest.getPortalId());
+			subModel.setPrice(productConfig.getPricePoint());
+			subModel.setPartnerTransactionId(subscriptionRequest.getPartnerTransactionId());
+			subModel.setProductId(productConfig.getProductId());
+			subModel.setProductName(productConfig.getProductName());
+			subModel.setProductType(productConfig.getPackType());
+			subModel.setServiceId(Long.valueOf(productConfig.getServiceId()));
+			subModel.setServiceName(productConfig.getServiceName());
+			subModel.setSubscriptionDate(new Date());
+			subModel.setTransactionId(subscriptionRequest.getTransactionId());
+			subModel.setUserId(0L);
+			subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
+			subscriptionRepo.save(subModel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return subModel;
+	}
+
+	public void saveBillingSuccessEntry(String msisdn, ProductConfigModel productConfig, SubscriptionModel model,
+			String typeEvent) {
+		TblBillingSuccess tblBillingSuccess = new TblBillingSuccess();
+		try {
+			tblBillingSuccess.setMsisdn(msisdn);
+			tblBillingSuccess.setProductId(productConfig.getProductId());
+			tblBillingSuccess.setPortalId(String.valueOf(productConfig.getPortalId()));
+			tblBillingSuccess.setServiceId(String.valueOf(productConfig.getServiceId()));
+			tblBillingSuccess.setDateTime(new Date());
+			tblBillingSuccess.setProcessDateTime(new Date());
+			tblBillingSuccess.setNoOfAttempt(1);
+			tblBillingSuccess.setDailyCounter(1);
+			tblBillingSuccess.setMonthlyCounter(1);
+			tblBillingSuccess.setTotalAmount(productConfig.getPricePoint());
+			tblBillingSuccess.setDeductedAmount(productConfig.getPricePoint());
+			tblBillingSuccess.setTypeEvent(typeEvent);
+			tblBillingSuccess.setSubscriptionDate(model.getSubscriptionDate());
+			tblBillingSuccess.setSubscriptionId(model.getId());
+			tblBillingSuccess.setMode(model.getChannel());
+			tblBillingSuccess.setRecordStatus(1);
+			tblBillingSuccess.setErrorDesc("Success");
+
+			billingSuccessRepo.save(tblBillingSuccess);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	public TblBillingLogs saveBillingLogsEntry(String msisdn, ProductConfigModel productConfig,
+			SubscriptionModel model, String typeEvent, String errordesc, String reason) {
+
+		TblBillingLogs tblBillingLogs = new TblBillingLogs();
+		try {
+			tblBillingLogs.setMsisdn(msisdn);
+			tblBillingLogs.setProductId(productConfig.getProductId());
+			tblBillingLogs.setPortalId(String.valueOf(productConfig.getPortalId()));
+			tblBillingLogs.setServiceId(String.valueOf(productConfig.getServiceId()));
+			tblBillingLogs.setTotalAmount(productConfig.getPricePoint());
+			tblBillingLogs.setDateTime(new Date());
+			tblBillingLogs.setSubscriptionDate(model.getSubscriptionDate());
+			tblBillingLogs.setErrorDesc(errordesc);
+			tblBillingLogs.setBillingresponse(reason);
+			tblBillingLogs.setTypeEvent(typeEvent);
+			tblBillingLogs.setRecordStatus(1);
+			tblBillingLogs.setNoOfAttempt(1);
+			tblBillingLogs.setDailyCounter(1);
+			tblBillingLogs.setMonthlyCounter(1);
+			tblBillingLogs.setMode(model.getChannel());
+
+			billingLogsRepo.save(tblBillingLogs);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tblBillingLogs;
 
 	}
 }

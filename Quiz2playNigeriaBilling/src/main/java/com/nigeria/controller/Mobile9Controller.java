@@ -26,12 +26,12 @@ public class Mobile9Controller {
 		return "Testing Method";
 	}
 
-	@PostMapping("notifications")
+	@PostMapping("v1/notifications")
 	public ResponseEntity<StatusResponse> notifications(@RequestBody String notificationRequest) {
 		return new ResponseEntity<StatusResponse>(mobile9Service.saveNotification(notificationRequest), HttpStatus.OK);
 	}
 
-	@PostMapping("subscription")
+	@PostMapping("v1/subscription")
 	public ResponseEntity<StatusResponse> sendSubscriptionRequest(@RequestBody SubscriptionRequest body) {
 		return new ResponseEntity<StatusResponse>(mobile9Service.sendSubscription(body), HttpStatus.OK);
 	}

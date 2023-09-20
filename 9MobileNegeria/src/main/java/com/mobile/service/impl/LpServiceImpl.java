@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.client.RestTemplate;
 
+import com.mobile.model.ProductConfigModel;
 import com.mobile.model.Quiz2playLpAdvertizer;
 import com.mobile.model.Quiz2playLpTransaction;
+import com.mobile.repo.ProductConfigRepos;
 import com.mobile.repo.Quiz2playLpAdvertizerRepo;
 import com.mobile.repo.Quiz2playLpTransactionRepo;
 import com.mobile.service.LpService;
@@ -26,6 +29,12 @@ public class LpServiceImpl implements LpService {
 	private Quiz2playLpTransactionRepo lpTransactionRepo;
 	@Autowired
 	private Quiz2playLpAdvertizerRepo advertizerRepo;
+
+	@Autowired
+	private ProductConfigRepos configRepos;
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Value("${SubReqBody}")
 	private String SubReqBody;
@@ -74,10 +83,14 @@ public class LpServiceImpl implements LpService {
 	@Override
 	public String getRedirectionURl(String kpId, String pubId, String productId, String language, String transId) {
 		// TODO Auto-generated method stub
-		String redirection = "https://lp.quiz2play.com/9mobile/redirection?kpId=" + kpId + "&productId=" + productId
-				+ "" + "&language=" + language + "&transactionId=" + transId + "";
-		String url = "http://msisdn.sla-alacrity.com/purchase?merchant=partner:29905e4f22cc93f337652a554165d60bf637b8ed&service=campaign:20b1b06bcf116d2388b84870a78ca4beb7fed222&correlator=123&redirect_url="
-				+ redirection + "";
+		ProductConfigModel productModel = configRepos.findByProductIdAndLanguage(productId, "en");
+		String url = null;
+		if (productModel != null) {
+			String redirection = "https://lp.quiz2play.com/9mobile/redirection?kpId=" + kpId + "&productId=" + productId
+					+ "" + "&language=" + language + "&transactionId=" + transId + "";
+			url = "http://checkout.sla-alacrity.com/purchase?merchant=" + productModel.getGraceDuration() + "&service="
+					+ productModel.getCredit() + "&correlator=123&redirect_url=" + redirection + "";
+		}
 		return url;
 	}
 
@@ -86,7 +99,6 @@ public class LpServiceImpl implements LpService {
 			String msisdn, String transactionId) {
 		String body = SubReqBody;
 		String url = subUrl;
-
 		Quiz2playLpTransaction lpModel = lpTransactionRepo.findByTransactionId(transactionId);
 		if (lpModel != null) {
 			body = body.replace("#productId#", productId);
@@ -95,13 +107,8 @@ public class LpServiceImpl implements LpService {
 			body = body.replace("#token#", token);
 			body = body.replace("#advId#", lpModel.getAdvId());
 			body = body.replace("#pubId#", lpModel.getPubId());
-			try {
-				String response = HttpRequets.sendRequest(url, body);
-				System.out.println(response);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String response = restTemplate.postForObject(url, body, String.class);
+			System.out.println(response);
 
 		}
 		return null;
