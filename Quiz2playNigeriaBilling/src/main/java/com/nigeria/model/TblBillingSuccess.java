@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class TblBillingSuccess {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 

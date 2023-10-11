@@ -29,6 +29,10 @@ spring:
           uri: http://192.168.48.25:5001/
           predicates:
             - Path=/api/ksa/**
+        - id: 9MOBILE-BILLING-NIGERIA
+          uri: lb://9MOBILE-BILLING-NIGERIA
+          predicates:
+           - Path=/api/9mobile-nigeria/**
          
 eureka:       
   instance:

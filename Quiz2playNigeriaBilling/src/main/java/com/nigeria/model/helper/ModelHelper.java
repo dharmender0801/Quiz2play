@@ -1,5 +1,6 @@
 package com.nigeria.model.helper;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,11 @@ public class ModelHelper {
 
 	public SubscriptionModel saveintosubscription(String msisdn, SubscriptionRequestModel subscriptionRequest,
 			ProductConfigModel productConfig) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, Integer.parseInt(productConfig.getValidity()));
+		Date date1 = cal.getTime();
 		SubscriptionModel subModel = new SubscriptionModel();
 		try {
 			subModel.setActiveStatus(1);
@@ -95,7 +101,10 @@ public class ModelHelper {
 			subModel.setSubscriptionDate(new Date());
 			subModel.setTransactionId(subscriptionRequest.getTransactionId());
 			subModel.setUserId(0L);
+			subModel.setChargeAmount(productConfig.getPricePoint());
 			subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
+			subModel.setChargeDate(new Date());
+			subModel.setExpiryDate(date1);
 			subscriptionRepo.save(subModel);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,7 +133,6 @@ public class ModelHelper {
 			tblBillingSuccess.setMode(model.getChannel());
 			tblBillingSuccess.setRecordStatus(1);
 			tblBillingSuccess.setErrorDesc("Success");
-
 			billingSuccessRepo.save(tblBillingSuccess);
 
 		} catch (Exception e) {
@@ -132,8 +140,9 @@ public class ModelHelper {
 		}
 
 	}
-	public TblBillingLogs saveBillingLogsEntry(String msisdn, ProductConfigModel productConfig,
-			SubscriptionModel model, String typeEvent, String errordesc, String reason) {
+
+	public TblBillingLogs saveBillingLogsEntry(String msisdn, ProductConfigModel productConfig, SubscriptionModel model,
+			String typeEvent, String errordesc, String reason) {
 
 		TblBillingLogs tblBillingLogs = new TblBillingLogs();
 		try {
@@ -160,5 +169,25 @@ public class ModelHelper {
 		}
 		return tblBillingLogs;
 
+	}
+	private void updateSubscriptionModel(SubscriptionModel subModel, ProductConfigModel productConfig) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, Integer.parseInt(productConfig.getValidity()));
+		Date date1 = cal.getTime();
+
+		try {
+			subModel.setChargeDate(new Date());
+			subModel.setChargeAmount(productConfig.getPricePoint());
+			subModel.setActiveStatus(2);
+			subModel.setExpiryDate(date1);
+			subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
+
+			subscriptionRepo.save(subModel);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

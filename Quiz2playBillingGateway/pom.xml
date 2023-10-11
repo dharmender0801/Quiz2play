@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kenya</groupId>
-	<artifactId>Quiz2play-Kenya-Billing</artifactId>
+	<artifactId>Quiz2play-Billing-Gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Quiz2playBillingGateway</name>
 	<description>Quiz2play Kenya</description>

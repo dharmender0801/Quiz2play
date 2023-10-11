@@ -83,6 +83,7 @@ public class LpServiceImpl implements LpService {
 	@Override
 	public String getRedirectionURl(String kpId, String pubId, String productId, String language, String transId) {
 		// TODO Auto-generated method stub
+		System.out.println(productId);
 		ProductConfigModel productModel = configRepos.findByProductIdAndLanguage(productId, "en");
 		String url = null;
 		if (productModel != null) {
@@ -107,7 +108,13 @@ public class LpServiceImpl implements LpService {
 			body = body.replace("#token#", token);
 			body = body.replace("#advId#", lpModel.getAdvId());
 			body = body.replace("#pubId#", lpModel.getPubId());
-			String response = restTemplate.postForObject(url, body, String.class);
+			String response = null;
+			try {
+				response = HttpRequets.sendRequest(url, body);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(response);
 
 		}

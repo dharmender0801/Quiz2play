@@ -11,8 +11,8 @@ import okhttp3.Response;
 
 public class HttpUtils {
 	public static String sendRequest(String url) throws IOException {
-		String username = "altruistte_754_sbox";
-		String password = "rdeho9u5o";
+		String username = "altruistte_616_live";
+		String password = "xundefinky";
 		String credentials = username + ":" + password;
 		String base64Credentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 		System.out.println(base64Credentials);

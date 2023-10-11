@@ -25,7 +25,7 @@
                         clock
                         in 30 seconds & answer the multiple choice text based question for top score!
                     </div>
-                    <img src="${pageContext.request.contextPath}/images/download (1).png"
+                    <img src="${pageContext.request.contextPath}/images1/download (1).png"
                         class="img-fluid d-block mx-auto logo_0 nine_logo my-auto ms-3" alt="logo_0"
                         style="width:105px; flex:0 0 auto;">
                 </div>
@@ -41,14 +41,14 @@
 
                     <div class="row justify-content-between">
                         <div class="col-md-5 col-7 order-md-0 order-1 my-auto">
-                            <img src="${pageContext.request.contextPath}/images/10666.png" class="img-fluid  d-block"
+                            <img src="${pageContext.request.contextPath}/images1/10666.png" class="img-fluid  d-block"
                                 alt="spin_0">
                         </div>
                         <div class="col-md-4 my-auto">
-                            <img src="${pageContext.request.contextPath}/images/logo.png"
+                            <img src="${pageContext.request.contextPath}/images1/logo.png"
                                 class="img-fluid d-block mx-auto logo_0" alt="logo_0">
 
-                            <img src="${pageContext.request.contextPath}/images/quote.png"
+                            <img src="${pageContext.request.contextPath}/images1/quote.png"
                                 class="img-fluid d-block mx-auto txt_0 " alt="text">
                             <!-- <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number"> -->
 
@@ -57,7 +57,7 @@
                             <p class="text-white text-center m-0 p-0">${msg2}</p>
                         </div>
                         <div class="col-md-3 col-5 mt-auto order-2">
-                            <img src="${pageContext.request.contextPath}/images/8357600.png"
+                            <img src="${pageContext.request.contextPath}/images1/8357600.png"
                                 class="img-fluid d-block girl_0" alt="girl_0">
 
                         </div>

@@ -76,7 +76,7 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 			if (configModel != null) {
 				String url = " https://api.sla-alacrity.com/v2.2/subscription/create?msisdn=" + body.getToken()
 						+ "&campaign=" + configModel.getCredit() + "&merchant" + "=" + configModel.getGraceDuration()
-						+ "&trial=0&language=en&trial_once=false";
+						+ "&language=en";
 				String response = HttpUtils.sendRequest(url);
 				System.out.println(response);
 				JsonNode reqNode = mapper.readTree(response);
