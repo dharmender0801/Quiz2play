@@ -1,4 +1,4 @@
- package com.nigeria.controller;
+package com.nigeria.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nigeria.request.NotificationRequest;
 import com.nigeria.request.SubscriptionRequest;
 import com.nigeria.response.StatusResponse;
 import com.nigeria.service.Mobile9Service;
@@ -26,8 +27,9 @@ public class Mobile9Controller {
 	public String checkMeyhos() {
 		return "Testing Method";
 	}
+
 	@PostMapping("v1/notifications")
-	public ResponseEntity<StatusResponse> notifications(@RequestBody String notificationRequest) {
+	public ResponseEntity<StatusResponse> notifications(@RequestBody NotificationRequest notificationRequest) {
 		return new ResponseEntity<StatusResponse>(mobile9Service.saveNotification(notificationRequest), HttpStatus.OK);
 	}
 

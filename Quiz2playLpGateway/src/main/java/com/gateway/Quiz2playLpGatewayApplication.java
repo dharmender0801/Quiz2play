@@ -11,5 +11,6 @@ public class Quiz2playLpGatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(Quiz2playLpGatewayApplication.class, args);
 	}
+	
 
 }

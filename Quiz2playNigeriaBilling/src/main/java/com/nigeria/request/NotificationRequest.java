@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class NotificationRequest {
 
-	private String success;
-	private String error;
+	private notifyReq success;
+	private notifyReq error;
 
 }

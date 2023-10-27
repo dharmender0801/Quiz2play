@@ -25,11 +25,15 @@ spring:
         uri: "lb://9MOBILE-NIGERIA/css/"
         predicates:
         - Path=/css/**
+#      - id: images-route
+#        uri: "lb://9MOBILE-NIGERIA/images/" 
+#        predicates:
+#        - Path=/images/**
       - id: images-route
-        uri: "lb://9MOBILE-NIGERIA/images/" 
+        uri: "http://192.168.48.25:9094/images/" 
         predicates:
         - Path=/images/**
-      - id: kenya_route
+      - id: burkina_route
         uri: http://192.168.48.25:9094/
         predicates:
         - Path=/burkina/**

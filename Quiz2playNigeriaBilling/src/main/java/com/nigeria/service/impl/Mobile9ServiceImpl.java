@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nigeria.model.PartnerNoticationRequest;
@@ -16,6 +17,7 @@ import com.nigeria.model.helper.ModelHelper;
 import com.nigeria.repos.PartnerNotificationRepo;
 import com.nigeria.repos.ProductConfigRepos;
 import com.nigeria.repos.SubscriptionRequestRepos;
+import com.nigeria.request.NotificationRequest;
 import com.nigeria.request.SubscriptionRequest;
 import com.nigeria.response.StatusResponse;
 import com.nigeria.service.Mobile9Service;
@@ -38,30 +40,25 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public StatusResponse saveNotification(String notificationRequest) {
+	public StatusResponse saveNotification(NotificationRequest req) {
 		StatusResponse response = new StatusResponse();
 		ObjectMapper objectMapper = new ObjectMapper();
-
+		String jsonBody;
 		try {
-			JsonNode reqNode = objectMapper.readTree(notificationRequest);
-			Map<String, Object> responseMap = objectMapper.readValue(notificationRequest, Map.class);
-			if (responseMap.containsKey("error")) {
-				String msisdn = reqNode.get("error").get("msisdn").asText();
-				helper.saveNotificationRequest(msisdn, notificationRequest, "200-ok", "106");
-				System.out.println(notificationRequest);
-			}
-			if (responseMap.containsKey("success")) {
-				String msisdn = reqNode.get("error").get("msisdn").asText();
-				helper.saveNotificationRequest(msisdn, notificationRequest, "200-ok", "106");
-			}
+			jsonBody = objectMapper.writeValueAsString(req);
+			helper.saveNotificationRequest(req.getSuccess().getMsisdn(), jsonBody, "200-ok", "106");
+			if (req.getSuccess() != null) {
+				SubscriptionModel subModel = helper.updateSubscription(req.getSuccess());
 
+			} else {
+
+			}
 			response.setStatusCode(200);
 			response.setDescripttion("Success");
 		} catch (Exception e) {
 			response.setStatusCode(500);
 			response.setDescripttion("Internal Server Error !");
 			e.printStackTrace();
-
 		}
 		return response;
 	}
@@ -76,7 +73,7 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 			if (configModel != null) {
 				String url = " https://api.sla-alacrity.com/v2.2/subscription/create?msisdn=" + body.getToken()
 						+ "&campaign=" + configModel.getCredit() + "&merchant" + "=" + configModel.getGraceDuration()
-						+ "&language=en";
+						+ "&language=en&trial=1&trial_once=true";
 				String response = HttpUtils.sendRequest(url);
 				System.out.println(response);
 				JsonNode reqNode = mapper.readTree(response);
@@ -85,7 +82,7 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 				if (responseMap.containsKey("error")) {
 					String msisdn = reqNode.get("error").get("msisdn").asText();
 					SubscriptionRequestModel requestModel = helper.saveSubscriptionRequest(body, response, url, msisdn);
-					
+
 				}
 				if (responseMap.containsKey("success")) {
 					String msisdn = reqNode.get("success").get("msisdn").asText();
@@ -93,9 +90,9 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 					if (reqNode.get("success").get("transaction").get("status").asText().trim()
 							.equalsIgnoreCase("CHARGED")) {
 						SubscriptionModel subModel = helper.saveintosubscription(msisdn, requestModel, configModel);
-						helper.saveBillingSuccessEntry(msisdn, configModel, subModel, "sub");
-						helper.saveBillingLogsEntry(msisdn, configModel, subModel, "sub", "success",
-								reqNode.get("success").get("transaction").get("status").asText());
+//						helper.saveBillingSuccessEntry(msisdn, configModel, subModel, "sub");
+//						helper.saveBillingLogsEntry(msisdn, configModel, subModel, "sub", "success",
+//								reqNode.get("success").get("transaction").get("status").asText());
 					}
 
 				}

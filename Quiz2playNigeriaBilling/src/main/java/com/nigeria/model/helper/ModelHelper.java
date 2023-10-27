@@ -18,6 +18,7 @@ import com.nigeria.repos.SubscriptionRequestRepos;
 import com.nigeria.repos.TblBillingLogsRepo;
 import com.nigeria.repos.TblBillingSuccessRepo;
 import com.nigeria.request.SubscriptionRequest;
+import com.nigeria.request.notifyReq;
 
 @Component
 public class ModelHelper {
@@ -80,7 +81,7 @@ public class ModelHelper {
 		cal.setTime(new Date());
 		cal.add(Calendar.DATE, Integer.parseInt(productConfig.getValidity()));
 		Date date1 = cal.getTime();
-		SubscriptionModel subModel = new SubscriptionModel();
+		SubscriptionModel subModel = subscriptionRepo.findByMsisdn(msisdn).orElse(new SubscriptionModel());
 		try {
 			subModel.setActiveStatus(1);
 			subModel.setAdvId(subscriptionRequest.getAdvId());
@@ -101,9 +102,9 @@ public class ModelHelper {
 			subModel.setSubscriptionDate(new Date());
 			subModel.setTransactionId(subscriptionRequest.getTransactionId());
 			subModel.setUserId(0L);
-			subModel.setChargeAmount(productConfig.getPricePoint());
+//			subModel.setChargeAmount();
 			subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
-			subModel.setChargeDate(new Date());
+//			subModel.setChargeDate(new Date());
 			subModel.setExpiryDate(date1);
 			subscriptionRepo.save(subModel);
 		} catch (Exception e) {
@@ -170,6 +171,7 @@ public class ModelHelper {
 		return tblBillingLogs;
 
 	}
+
 	private void updateSubscriptionModel(SubscriptionModel subModel, ProductConfigModel productConfig) {
 
 		Calendar cal = Calendar.getInstance();
@@ -189,5 +191,10 @@ public class ModelHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public SubscriptionModel updateSubscription(notifyReq success) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -42,7 +42,7 @@
                         <!-- <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number"> -->
 
                        <!--<button type="button" class="btn d-block mx-auto btn_0 my-4">Subscribe</button>-->
-                       <img src="${pageContext.request.contextPath}/images/right.png"  alt="Avatar" class="img-fluid d-block mx-auto my-4 ms-auto mt-auto" alt="logo_0" style="width:200px; flex:0 0 auto;">
+                       <img src="${pageContext.request.contextPath}/images1/right.png"  alt="Avatar" class="img-fluid d-block mx-auto my-4 ms-auto mt-auto" alt="logo_0" style="width:200px; flex:0 0 auto;">
                         <p class="phra_0 email_par text-center d-block ms-auto mb-auto my-auto mx-auto mt-5"><b> <font size="5">  
                             Your Subscription Request Is Successful
                         </font> </b><p class="text-white text-center m-0 p-0 ="font-size: 200px" > </p>
