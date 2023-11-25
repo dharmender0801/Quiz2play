@@ -38,7 +38,6 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 	@Autowired
 	private ModelHelper helper;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public StatusResponse saveNotification(NotificationRequest req) {
 		StatusResponse response = new StatusResponse();
@@ -48,9 +47,17 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 			jsonBody = objectMapper.writeValueAsString(req);
 			helper.saveNotificationRequest(req.getSuccess().getMsisdn(), jsonBody, "200-ok", "106");
 			if (req.getSuccess() != null) {
-				SubscriptionModel subModel = helper.updateSubscription(req.getSuccess());
-
-			} else {
+				if (req.getSuccess().getTransaction().getStatus().equalsIgnoreCase("DELETED")) {
+					helper.Unsubscription(req.getSuccess());
+				}
+				if (req.getSuccess().getMode().equalsIgnoreCase("RENEWAL")) {
+					if (req.getSuccess().getTransaction().getStatus().equalsIgnoreCase("CHARGED")) {
+						SubscriptionModel subModel = helper.updateSubscription(req.getSuccess());
+					}
+					if (req.getSuccess().getTransaction().getStatus().equalsIgnoreCase("INSUFFICIENT_FUNDS")) {
+						helper.saveBillingLogsEntry(req.getSuccess());
+					}
+				}
 
 			}
 			response.setStatusCode(200);
@@ -80,24 +87,27 @@ public class Mobile9ServiceImpl implements Mobile9Service {
 				@SuppressWarnings("unchecked")
 				Map<String, Object> responseMap = mapper.readValue(response, Map.class);
 				if (responseMap.containsKey("error")) {
-					String msisdn = reqNode.get("error").get("msisdn").asText();
+					String msisdn = reqNode.get("msisdn").asText();
 					SubscriptionRequestModel requestModel = helper.saveSubscriptionRequest(body, response, url, msisdn);
-
+					status.setDescripttion(reqNode.get("transaction").get("status").asText());
+					status.setStatusCode(404);
 				}
 				if (responseMap.containsKey("success")) {
-					String msisdn = reqNode.get("success").get("msisdn").asText();
+					String msisdn ="";
+					if (reqNode.get("success").asBoolean()) {
+						msisdn = reqNode.get("msisdn").asText();
+					}
+
 					SubscriptionRequestModel requestModel = helper.saveSubscriptionRequest(body, response, url, msisdn);
-					if (reqNode.get("success").get("transaction").get("status").asText().trim()
-							.equalsIgnoreCase("CHARGED")) {
-						SubscriptionModel subModel = helper.saveintosubscription(msisdn, requestModel, configModel);
+					SubscriptionModel subModel = helper.saveintosubscription(msisdn, requestModel, configModel);
 //						helper.saveBillingSuccessEntry(msisdn, configModel, subModel, "sub");
 //						helper.saveBillingLogsEntry(msisdn, configModel, subModel, "sub", "success",
 //								reqNode.get("success").get("transaction").get("status").asText());
-					}
 
+					status.setDescripttion("Success");
+					status.setStatusCode(200);
 				}
-				status.setDescripttion("Success");
-				status.setStatusCode(200);
+
 			}
 		} catch (Exception e) {
 			status.setDescripttion("Internal Server Error !");

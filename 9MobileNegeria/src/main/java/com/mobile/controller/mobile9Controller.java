@@ -1,6 +1,8 @@
 package com.mobile.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,30 +35,42 @@ public class mobile9Controller {
 		PromotionTypeModel proModel = promotionService.GetPromo("106", model);
 		long requestId = (long) (Math.random() * 100000000000000L);
 		Boolean response = lpService.SaveToTransaction(userAgent, model, cpId, kpId, pubId, language,
-				proModel.getProductId(),requestId);
-		
-		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, proModel.getProductId(), language,String.valueOf(requestId));
+				proModel.getProductId(), requestId);
+
+		String redirectionUrl = lpService.getRedirectionURl(kpId, pubId, proModel.getProductId(), language,
+				String.valueOf(requestId));
 		return response ? "9mobile" : "";
 	}
 
 	@GetMapping("/9mobile/redirect")
 	public String Redirection(HttpServletRequest request, HttpServletResponse response) {
 		String redirectionUrl = lpService.getRedirectionURl(request.getParameter("kpId"), request.getParameter("pubId"),
-				request.getParameter("productId"), request.getParameter("language"),request.getParameter("transactionId"));
+				request.getParameter("productId"), request.getParameter("language"),
+				request.getParameter("transactionId"));
 		System.out.println(redirectionUrl);
 		return "redirect:" + redirectionUrl;
 	}
 
 	@GetMapping("/9mobile/redirection")
-	public String backRedirection(@RequestParam(required = false ) String  status, @RequestParam(required = false ) String token, @RequestParam(required = false ) String kpId,
-			@RequestParam(required = false ) String language, @RequestParam(required = false ) String productId,
+	public String backRedirection(@RequestParam(required = false) String status,
+			@RequestParam(required = false, defaultValue = "0") String token,
+			@RequestParam(required = false, defaultValue = "0") String kpId,
+			@RequestParam(required = false, defaultValue = "en") String language,
+			@RequestParam(required = false, defaultValue = "1020") String productId,
 			@RequestParam(value = "msisdn", required = false, defaultValue = "0") String msisdn,
-			@RequestParam String transactionId
-			
-			) {
-		System.out.println("Token - : :  "+token);
-		String response = lpService.sendSubscriptionRequest(status, token, kpId, language, productId, msisdn,transactionId);
+			@RequestParam String transactionId, Model model
+
+	) {
+		System.out.println("Token - : :  " + token);
+		String response = lpService.sendSubscriptionRequest(status, token, kpId, language, productId, msisdn,
+				transactionId, model);
+		System.out.println(model.getAttribute("text"));
 		return "9mobilesucess";
+	}
+
+	@GetMapping("/9mobile/redirection/url")
+	public ResponseEntity<String> getRedirect(@RequestParam String productId) {
+		return new ResponseEntity<String>(lpService.getURL(productId),HttpStatus.OK);
 	}
 
 }

@@ -16,7 +16,6 @@ import com.nigeria.service.Mobile9Service;
 
 @RestController
 @RequestMapping("/api/9mobile-nigeria/")
-
 public class Mobile9Controller {
 
 	@Autowired
@@ -37,5 +36,6 @@ public class Mobile9Controller {
 	public ResponseEntity<StatusResponse> sendSubscriptionRequest(@RequestBody SubscriptionRequest body) {
 		return new ResponseEntity<StatusResponse>(mobile9Service.sendSubscription(body), HttpStatus.OK);
 	}
+
 
 }

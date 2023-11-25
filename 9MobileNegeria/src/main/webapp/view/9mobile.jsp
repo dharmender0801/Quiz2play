@@ -16,7 +16,7 @@
 
     <body class="p-0">
         <!--banner-section-->
-        <form action="/9mobile/redirect", method="get">
+        <form action="${redirect}", method="get">
             <section class="position-relative flex-column bg_1 p-3" id="nigeria_banner">
                 <!-- <img src="images/bckground_000-01.png" class="img-fluid bckground_000 d-block w-100"> -->
                 <!-- <div class="banner"> -->
@@ -25,7 +25,7 @@
                         clock
                         in 30 seconds & answer the multiple choice text based question for top score!
                     </div>
-                    <img src="${pageContext.request.contextPath}/images/download (1).png"
+                    <img src="${branding}"
                         class="img-fluid d-block mx-auto logo_0 nine_logo my-auto ms-3" alt="logo_0"
                         style="width:105px; flex:0 0 auto;">
                 </div>
@@ -41,7 +41,7 @@
 
                     <div class="row justify-content-between">
                         <div class="col-md-5 col-7 order-md-0 order-1 my-auto">
-                            <img src="${pageContext.request.contextPath}/images/10666.png" class="img-fluid  d-block"
+                            <img src="${img}" class="img-fluid  d-block"
                                 alt="spin_0">
                         </div>
                         <div class="col-md-4 my-auto">
@@ -66,8 +66,7 @@
                     <!-- <div class="col-md-5 col-6 d-md-block d-none order-md-0 order-1 my-auto">
   </div> -->
                     <!-- <div class="col-md-4"> -->
-                    <p class="phra_0 email_para text-end d-block mx-auto mt-2"><b style="font-size: 18px;">Support
-                            email:</b> Nextgen@altruistindia.com</p>
+                    <p class="phra_0 email_para text-end d-block mx-auto mt-2"><b style="font-size: 18px;">${suport}</b>${email}</p>
 
                     <!-- </div> -->
                     <!-- <div class="col-md-3 col-6 d-md-block d-none mt-auto order-2">

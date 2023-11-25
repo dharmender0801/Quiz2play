@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mobile.model.ProductConfigModel;
 import com.mobile.model.Quiz2playLpAdvertizer;
 import com.mobile.model.Quiz2playLpTransaction;
@@ -57,6 +59,11 @@ public class LpServiceImpl implements LpService {
 				model.addAttribute("productId", productId);
 				model.addAttribute("language", language);
 				model.addAttribute("transactionId", requestId);
+				model.addAttribute("redirect", "/9mobile/redirect");
+				model.addAttribute("img", "/images/10666.png");
+				model.addAttribute("branding", "/images/download (1).png");
+				model.addAttribute("suport", "Support email:");
+				model.addAttribute("email", "Nextgen@altruistindia.com");
 
 				InetAddress IP = InetAddress.getLocalHost();
 				System.out.println(IP.toString());
@@ -97,7 +104,9 @@ public class LpServiceImpl implements LpService {
 
 	@Override
 	public String sendSubscriptionRequest(String status, String token, String kpId, String language, String productId,
-			String msisdn, String transactionId) {
+			String msisdn, String transactionId, Model model) {
+		String response = null;
+		String Backresonse = null;
 		String body = SubReqBody;
 		String url = subUrl;
 		Quiz2playLpTransaction lpModel = lpTransactionRepo.findByTransactionId(transactionId);
@@ -108,17 +117,57 @@ public class LpServiceImpl implements LpService {
 			body = body.replace("#token#", token);
 			body = body.replace("#advId#", lpModel.getAdvId());
 			body = body.replace("#pubId#", lpModel.getPubId());
-			String response = null;
 			try {
 				response = HttpRequets.sendRequest(url, body);
+				ObjectMapper mapper = new ObjectMapper();
+				JsonNode node = mapper.readTree(response);
+				Backresonse = node.get("statusCode").asText();
+				if (Backresonse.equalsIgnoreCase("200")) {
+					model.addAttribute("text", "Your Subscription Request Is Successful");
+					model.addAttribute("img", "http://lp.quiz2play.com/images/right.png");
+				} else {
+					model.addAttribute("text", "Your Subscription Request Is Unsuccessful");
+					model.addAttribute("img",
+							"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Cross_red_circle.svg/512px-Cross_red_circle.svg.png?20181021160952");
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println(response);
 
+		} else {
+			body = body.replace("#productId#", productId);
+			body = body.replace("#kpId#", "0");
+			body = body.replace("#lang#", language);
+			body = body.replace("#token#", token);
+			body = body.replace("#advId#", "0");
+			body = body.replace("#pubId#", "0");
+			try {
+				response = HttpRequets.sendRequest(url, body);
+				ObjectMapper mapper = new ObjectMapper();
+				JsonNode node = mapper.readTree(response);
+				Backresonse = node.get("statusCode").asText();
+				if (Backresonse.equalsIgnoreCase("200")) {
+					model.addAttribute("text", "Your Subscription Request Is Successful");
+					model.addAttribute("img", "http://lp.quiz2play.com/images/right.png");
+				} else {
+					model.addAttribute("text", "Your Subscription Request Is Unsuccessful");
+					model.addAttribute("img",
+							"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Cross_red_circle.svg/512px-Cross_red_circle.svg.png?20181021160952");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return Backresonse;
+	}
+
+	@Override
+	public String getURL(String productId) {
+		// TODO Auto-generated method stub
+		return getRedirectionURl("0", "0", productId, "en", "0");
 	}
 
 }

@@ -5,18 +5,21 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.nigeria.model.PartnerNoticationRequest;
 import com.nigeria.model.ProductConfigModel;
+import com.nigeria.model.SubscriptionHistoryModel;
 import com.nigeria.model.SubscriptionModel;
 import com.nigeria.model.SubscriptionRequestModel;
 import com.nigeria.model.TblBillingLogs;
 import com.nigeria.model.TblBillingSuccess;
 import com.nigeria.repos.PartnerNotificationRepo;
+import com.nigeria.repos.ProductConfigRepos;
+import com.nigeria.repos.SubscriptionHistoryRepos;
 import com.nigeria.repos.SubscriptionRepos;
 import com.nigeria.repos.SubscriptionRequestRepos;
 import com.nigeria.repos.TblBillingLogsRepo;
 import com.nigeria.repos.TblBillingSuccessRepo;
+import com.nigeria.repos.UserProfileRepos;
 import com.nigeria.request.SubscriptionRequest;
 import com.nigeria.request.notifyReq;
 
@@ -33,6 +36,12 @@ public class ModelHelper {
 	private TblBillingLogsRepo billingLogsRepo;
 	@Autowired
 	private TblBillingSuccessRepo billingSuccessRepo;
+	@Autowired
+	private SubscriptionHistoryRepos historyRepos;
+	@Autowired
+	private UserProfileRepos profileRepos;
+	@Autowired
+	private ProductConfigRepos configRepos;
 
 	public SubscriptionRequestModel saveSubscriptionRequest(SubscriptionRequest body, String response, String url,
 			String msisdn) {
@@ -142,34 +151,39 @@ public class ModelHelper {
 
 	}
 
-	public TblBillingLogs saveBillingLogsEntry(String msisdn, ProductConfigModel productConfig, SubscriptionModel model,
-			String typeEvent, String errordesc, String reason) {
+	public TblBillingLogs saveBillingLogsEntry(notifyReq notifyReq) {
+		SubscriptionModel SubModel = subscriptionRepo.findByMsisdn(notifyReq.getMsisdn()).get();
+		if (SubModel != null) {
+			String typeEvent = null;
+			if (SubModel.getChargeDate() == null) {
+				typeEvent = "sub";
+			} else {
+				typeEvent = "ren";
+			}
+			TblBillingLogs tblBillingLogs = new TblBillingLogs();
+			try {
+				tblBillingLogs.setMsisdn(notifyReq.getMsisdn());
+				tblBillingLogs.setProductId(SubModel.getProductId());
+				tblBillingLogs.setPortalId(String.valueOf(SubModel.getPortalId()));
+				tblBillingLogs.setServiceId(String.valueOf(SubModel.getServiceId()));
+				tblBillingLogs.setTotalAmount(SubModel.getAmount());
+				tblBillingLogs.setDateTime(new Date());
+				tblBillingLogs.setSubscriptionDate(SubModel.getSubscriptionDate());
+				tblBillingLogs.setErrorDesc(notifyReq.getTransaction().getStatus());
+				tblBillingLogs.setBillingresponse(notifyReq.getTransaction().getStatus());
+				tblBillingLogs.setTypeEvent(typeEvent);
+				tblBillingLogs.setRecordStatus(1);
+				tblBillingLogs.setNoOfAttempt(1);
+				tblBillingLogs.setDailyCounter(1);
+				tblBillingLogs.setMonthlyCounter(1);
+				tblBillingLogs.setMode(SubModel.getChannel());
+				billingLogsRepo.save(tblBillingLogs);
 
-		TblBillingLogs tblBillingLogs = new TblBillingLogs();
-		try {
-			tblBillingLogs.setMsisdn(msisdn);
-			tblBillingLogs.setProductId(productConfig.getProductId());
-			tblBillingLogs.setPortalId(String.valueOf(productConfig.getPortalId()));
-			tblBillingLogs.setServiceId(String.valueOf(productConfig.getServiceId()));
-			tblBillingLogs.setTotalAmount(productConfig.getPricePoint());
-			tblBillingLogs.setDateTime(new Date());
-			tblBillingLogs.setSubscriptionDate(model.getSubscriptionDate());
-			tblBillingLogs.setErrorDesc(errordesc);
-			tblBillingLogs.setBillingresponse(reason);
-			tblBillingLogs.setTypeEvent(typeEvent);
-			tblBillingLogs.setRecordStatus(1);
-			tblBillingLogs.setNoOfAttempt(1);
-			tblBillingLogs.setDailyCounter(1);
-			tblBillingLogs.setMonthlyCounter(1);
-			tblBillingLogs.setMode(model.getChannel());
-
-			billingLogsRepo.save(tblBillingLogs);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		return tblBillingLogs;
-
+		return null;
 	}
 
 	private void updateSubscriptionModel(SubscriptionModel subModel, ProductConfigModel productConfig) {
@@ -195,6 +209,74 @@ public class ModelHelper {
 
 	public SubscriptionModel updateSubscription(notifyReq success) {
 		// TODO Auto-generated method stub
-		return null;
+		SubscriptionModel SubModel = subscriptionRepo.findByMsisdn(success.getMsisdn()).get();
+		ProductConfigModel PModel = configRepos.findByProductIdAndLanguage(SubModel.getProductId(), "en");
+		updateSubscriptionModel(SubModel, PModel);
+		String typeEvent = null;
+		if (SubModel.getChargeDate() == null) {
+			typeEvent = "sub";
+		} else {
+			typeEvent = "ren";
+		}
+		saveBillingSuccessEntry(success.getMsisdn(), PModel, SubModel, typeEvent);
+		saveBillingLogsEntry(success);
+		return SubModel;
 	}
+
+	public void Unsubscription(notifyReq success) {
+		// TODO Auto-generated method stub
+		SubscriptionModel subModel = subscriptionRepo.findByMsisdn(success.getMsisdn()).get();
+		if (subModel != null) {
+			saveUnsubscriptionEntry(subModel);
+			profileRepos.deleteFromSubscriptionId(subModel.getId());
+			subscriptionRepo.delete(subModel);
+		}
+
+	}
+
+	private void saveUnsubscriptionEntry(SubscriptionModel subModel) {
+		// TODO Auto-generated method stub
+		SubscriptionHistoryModel subHistory = new SubscriptionHistoryModel();
+		try {
+			subHistory.setActiveStatus(subModel.getActiveStatus());
+			subHistory.setAdvId(subModel.getAdvId());
+			subHistory.setAmount(subModel.getAmount());
+			subHistory.setCancelChannel("Callback");
+			subHistory.setCancelDate(new Date());
+			subHistory.setCancelReason("Callback");
+			subHistory.setSubscriptionId(subModel.getId());
+			subHistory.setChannel(subModel.getChannel());
+			subHistory.setChargeAmount(subModel.getChargeAmount());
+			subHistory.setChargeDate(subModel.getChargeDate());
+			subHistory.setCurrency(subModel.getCurrency());
+			subHistory.setExpiryDate(subModel.getExpiryDate());
+			subHistory.setGraceDate(subModel.getGraceDate());
+			subHistory.setKeyword(subModel.getKeyword());
+			subHistory.setLanguage(subModel.getLanguage());
+			subHistory.setMappedItemtypeId(subModel.getMappedItemtypeId());
+			subHistory.setChargeAmount(subModel.getChargeAmount());
+			subHistory.setMeta1(subModel.getMeta1());
+			subHistory.setMeta2(subModel.getMeta2());
+			subHistory.setMeta3(subModel.getMeta3());
+			subHistory.setMsisdn(subModel.getMsisdn());
+			subHistory.setOperatorResponse(subModel.getOperatorResponse());
+			subHistory.setPartnerTransactionId(subModel.getPartnerTransactionId());
+			subHistory.setPrice(subModel.getPrice());
+			subHistory.setProductId(subModel.getProductId());
+			subHistory.setProductName(subModel.getProductName());
+			subHistory.setProductType(subModel.getProductType());
+			subHistory.setServiceId(subModel.getServiceId());
+			subHistory.setServiceName(subModel.getServiceName());
+			subHistory.setSubscriptionDate(subModel.getSubscriptionDate());
+			subHistory.setTransactionId(subModel.getTransactionId());
+			subHistory.setUserId(subModel.getUserId());
+			subHistory.setValidity(subModel.getValidity());
+
+			historyRepos.save(subHistory);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

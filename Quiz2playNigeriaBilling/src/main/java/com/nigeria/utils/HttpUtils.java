@@ -29,4 +29,13 @@ public class HttpUtils {
 		return responseData;
 	}
 
+	public static String sendGETRequest(String url) throws IOException {
+		OkHttpClient client = new OkHttpClient().newBuilder().build();
+		Request pinGenRequest = new Request.Builder().url(url).method("GET", null)
+				.addHeader("Content-Type", "application/json").build();
+		Response pinVerifyresponse = client.newCall(pinGenRequest).execute();
+		String responseData = pinVerifyresponse.body().string();
+		return responseData;
+	}
+
 }
