@@ -38,4 +38,17 @@ public class HttpUtils {
 		return responseData;
 	}
 
+	public static String sendRequestPost(String url) throws IOException {
+		OkHttpClient client = new OkHttpClient().newBuilder().build();
+		MediaType mediaType = MediaType.parse("application/json");
+//		@SuppressWarnings("deprecation")
+		RequestBody pinGenbody = RequestBody.create(mediaType, "");
+		Request pinGenRequest = new Request.Builder().url(url).method("POST", pinGenbody)
+				.addHeader("Content-Type", "application/json").build();
+
+		Response pinVerifyresponse = client.newCall(pinGenRequest).execute();
+		String responseData = pinVerifyresponse.body().string();
+		return responseData;
+	}
+
 }

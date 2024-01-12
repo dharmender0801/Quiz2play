@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mobile.model.PromotionTypeModel;
 import com.mobile.service.PromotionService;
 import com.mobile.service.mtnService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class MtnController {
@@ -35,27 +35,66 @@ public class MtnController {
 			@RequestParam(value = "pubId", required = false, defaultValue = "0") String pubId,
 			@RequestParam(value = "language", required = false, defaultValue = "en") String language,
 			@RequestHeader String Host) {
-		PromotionTypeModel proModel = promotionService.GetPromo("106", model);
-		mtnService.saveTransaction(userAgent, model, cpId, kpId, pubId, language, proModel.getProductId());
+		PromotionTypeModel proModel = promotionService.GetPromo("106", model, "2");
+		long requestId = (long) (Math.random() * 100000000000000L);
+		mtnService.saveTransaction(userAgent, model, cpId, kpId, pubId, language, proModel.getProductId(), requestId);
 		return "9mobile";
 	}
 
-	@RequestMapping(value = { "/nigeria/mtn/echohe" }, method = { RequestMethod.GET, RequestMethod.POST })
-	public void heDetail(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@GetMapping("/mtn/redirect")
+	public String Redirection(HttpServletRequest request, HttpServletResponse response, Model model) {
+//
+//		model.addAttribute("text", "Your Subscription Request Is Unsuccessful");
+//		model.addAttribute("img",
+//				"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Cross_red_circle.svg/512px-Cross_red_circle.svg.png?20181021160952");
+		String redirectionUrl = mtnService.getRedirectionURl(request.getParameter("kpId"),
+				request.getParameter("pubId"), request.getParameter("productId"), request.getParameter("language"),
+				request.getParameter("transactionId"));
+		System.out.println(redirectionUrl);
+		return "redirect:http://" + redirectionUrl;
+	}
+
+	@RequestMapping(value = "/nigeria/mtn/echohe", method = RequestMethod.GET)
+	public void heDetailGET(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
-
 		PrintWriter out = response.getWriter();
-		out.println("<html><body>");
-		out.println("<h1>Request Headers</h1>");
-
-		Enumeration<String> headerNames = request.getHeaderNames();
+		response.setContentType("text/html");
+		Enumeration headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
-			String headerName = headerNames.nextElement();
-			out.println("<strong>" + headerName + "</strong>: " + request.getHeader(headerName) + "<br>");
+			String headerName = (String) headerNames.nextElement();
+			out.write(headerName);
+			out.write("<br />");
+			Enumeration headers = request.getHeaders(headerName);
+			while (headers.hasMoreElements()) {
+				String headerValue = (String) headers.nextElement();
+				out.write("&nbsp;&nbsp;&nbsp;&nbsp;" + headerValue);
+				out.write("<br />");
+			}
 		}
+		out.write("------------");
+		out.write("Remote Addr : \"" + request.getRemoteAddr() + "\"");
+		out.write("------------");
 
-		out.println("</body></html>");
 		out.close();
+	}
+
+	@GetMapping("/mtn/wifi")
+	public String wifi(Model model, @RequestParam(value = "cpId", required = false, defaultValue = "0") String cpId,
+			@RequestParam(value = "kpId", required = false, defaultValue = "0") String kpId,
+			@RequestParam(value = "pubId", required = false, defaultValue = "0") String pubId,
+			@RequestParam(value = "language", required = false, defaultValue = "en") String language) {
+		PromotionTypeModel proModel = promotionService.GetPromo("106", model, "2");
+		model.addAttribute("kpId", kpId);
+		model.addAttribute("cpId", cpId);
+		model.addAttribute("pubId", pubId);
+		model.addAttribute("productId", proModel.getProductId());
+		model.addAttribute("language", language);
+		model.addAttribute("redirect", "/mtn/redirect");
+		model.addAttribute("img", "https://static.gamezop.com/quiz-champion/assets/images/quiz-champions-logo.png");
+		model.addAttribute("branding",
+				"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/MTN_Logo.svg/2048px-MTN_Logo.svg.png");
+
+		return "9mobilewifi";
 	}
 
 }

@@ -6,6 +6,6 @@ import com.mobile.model.PromotionTypeModel;
 
 public interface PromotionService {
 
-	PromotionTypeModel GetPromo(String string, Model model);
+	PromotionTypeModel GetPromo(String string, Model model, String operatorId);
 
 }

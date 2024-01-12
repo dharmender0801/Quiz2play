@@ -1,6 +1,7 @@
 package com.nigeria.service;
 
 import com.nigeria.request.SubscriptionRequest;
+import com.nigeria.request.secureDRequest;
 import com.nigeria.response.StatusResponse;
 
 public interface MtnService {
@@ -13,5 +14,7 @@ public interface MtnService {
 	StatusResponse sendForUnsub(String msisdn);
 
 	StatusResponse sendforSub(SubscriptionRequest request);
+
+	StatusResponse notifcationSecureD(secureDRequest dRequest);
 
 }

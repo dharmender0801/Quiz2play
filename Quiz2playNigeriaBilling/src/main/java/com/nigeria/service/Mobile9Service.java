@@ -10,5 +10,7 @@ public interface Mobile9Service {
 
 	StatusResponse sendSubscription(SubscriptionRequest body);
 
+	StatusResponse sendUnsubRequest(String msisdn);
+
 
 }

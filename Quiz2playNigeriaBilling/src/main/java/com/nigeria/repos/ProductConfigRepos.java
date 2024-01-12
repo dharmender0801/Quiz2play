@@ -16,4 +16,6 @@ public interface ProductConfigRepos extends JpaRepository<ProductConfigModel, Lo
 
 	ProductConfigModel findByCreditAndLanguage(String offerCode, String string);
 
+	ProductConfigModel findByCredit(String packName);
+
 }

@@ -33,6 +33,7 @@
                 <input type="hidden" value="${language}" name="language">
                 <input type="hidden" value="${productId}" name="productId">
                 <input type="hidden" value="${cpId}" name="cpId">
+                <input type="hidden" value="${cpId}" name="cpId">
                 <input type="hidden" value="${pubId}" name="pubId">
                 <input type="hidden" value="${transactionId}" name="transactionId">
                 <div class="container-fluid mt-5 mb-auto" style="position: relative; z-index:9;">
@@ -49,7 +50,7 @@
 
                             <img src="${pageContext.request.contextPath}/images/quote.png"
                                 class="img-fluid d-block mx-auto txt_0 " alt="text">
-                            <!-- <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number"> -->
+                             <input type="number" class="form-control tel_0 d-block mx-auto" name="phone" placeholder="Enter Your Cell Phone Number">
 
                             <button type="submit" class="btn d-block mx-auto btn_0">Subscribe</button>
                             <p class=" phra_0  d-block mx-auto my-2">${msg1}</p>

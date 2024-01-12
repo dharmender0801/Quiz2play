@@ -14,26 +14,38 @@ spring:
               allowedMethods: "*"
       routes:
         - id: kenya_route
-          uri: http://192.168.48.25:5001/
+          uri: http://192.168.167.25:5001/
           predicates:
             - Path=/api/kenya/**
         - id: orange_burkina_route
-          uri: http://192.168.48.25:5001/
+          uri: http://192.168.167.25:5001/
           predicates:
             - Path=/api/orange-burkina/**
         - id: zain_iraq_route
-          uri: http://192.168.48.25:5001/
+          uri: http://192.168.167.25:5001/
           predicates:
             - Path=/api/zain-iraq/**
         - id: ksa_route
-          uri: http://192.168.48.25:5001/
+          uri: http://192.168.167.25:5001/
           predicates:
             - Path=/api/ksa/**
         - id: 9MOBILE-BILLING-NIGERIA
           uri: lb://9MOBILE-BILLING-NIGERIA
           predicates:
            - Path=/api/9mobile-nigeria/**
-         
+        - id: 9MOBILE-BILLING-NIGERIA
+          uri: lb://9MOBILE-BILLING-NIGERIA
+          predicates:
+           - Path=/api/mtn-nigeria/**
+        - id: 9MOBILE-BILLING-NIGERIA
+          uri: lb://9MOBILE-BILLING-NIGERIA
+          predicates:
+           - Path=/swagger-ui/**
+        - id: vidchat
+          uri: http://192.168.167.25:8888/
+          predicates:
+           - Path=/api/v1/vidchat/**
+        
 eureka:       
   instance:
     prefer-ip-address: true
@@ -41,4 +53,4 @@ eureka:
     fetch-registry: true
     register-with-eureka: true  
     service-url:
-      defaultZone: http://192.168.48.25:5005/eureka    
+      defaultZone: http://192.168.167.25:5005/eureka    

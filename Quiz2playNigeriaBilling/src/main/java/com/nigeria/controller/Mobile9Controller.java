@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nigeria.request.NotificationRequest;
@@ -37,5 +38,9 @@ public class Mobile9Controller {
 		return new ResponseEntity<StatusResponse>(mobile9Service.sendSubscription(body), HttpStatus.OK);
 	}
 
+	@GetMapping("v1/unsubscripton")
+	public ResponseEntity<StatusResponse> sendUnsubSubscriptionRequest(@RequestParam String msisdn) {
+		return new ResponseEntity<StatusResponse>(mobile9Service.sendUnsubRequest(msisdn), HttpStatus.OK);
+	}
 
 }

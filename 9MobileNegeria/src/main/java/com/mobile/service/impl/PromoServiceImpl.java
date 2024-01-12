@@ -15,9 +15,9 @@ public class PromoServiceImpl implements PromotionService {
 	private PromotionTypeRepo promotionTypeRepo;
 
 	@Override
-	public PromotionTypeModel GetPromo(String portalid, Model model) {
+	public PromotionTypeModel GetPromo(String portalid, Model model, String operatorId) {
 		// TODO Auto-generated method stub
-		PromotionTypeModel response = promotionTypeRepo.findByPortalidAndStatus(portalid, "1");
+		PromotionTypeModel response = promotionTypeRepo.findByPortalidAndStatusAndOperatorid(portalid, "1", operatorId);
 		model.addAttribute("msg1", response.getPageMsg1());
 		model.addAttribute("msg2", response.getPageMsg2());
 		model.addAttribute("unsubcode", response.getUnsubcode());

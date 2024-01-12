@@ -16,4 +16,6 @@ public interface SubscriptionRequestRepos extends JpaRepository<SubscriptionRequ
 
 	SubscriptionRequestModel findByPartnerTransactionId(String kpid);
 
+	SubscriptionRequestModel findByMsisdn(String msisdn);
+
 }

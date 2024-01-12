@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,9 +20,6 @@ import com.mobile.repo.Quiz2playLpTransactionRepo;
 import com.mobile.service.LpService;
 import com.mobile.utils.HttpRequets;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 @Service
 public class LpServiceImpl implements LpService {
 
@@ -35,8 +31,8 @@ public class LpServiceImpl implements LpService {
 	@Autowired
 	private ProductConfigRepos configRepos;
 
-	@Autowired
-	private RestTemplate restTemplate;
+//	@Autowired
+//	private RestTemplate restTemplate;
 
 	@Value("${SubReqBody}")
 	private String SubReqBody;

@@ -32,7 +32,7 @@ public class mobile9Controller {
 			@RequestParam(value = "pubId", required = false, defaultValue = "0") String pubId,
 			@RequestParam(value = "language", required = false, defaultValue = "en") String language,
 			@RequestHeader String Host) {
-		PromotionTypeModel proModel = promotionService.GetPromo("106", model);
+		PromotionTypeModel proModel = promotionService.GetPromo("106", model,"1");
 		long requestId = (long) (Math.random() * 100000000000000L);
 		Boolean response = lpService.SaveToTransaction(userAgent, model, cpId, kpId, pubId, language,
 				proModel.getProductId(), requestId);

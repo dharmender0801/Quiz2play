@@ -5,20 +5,25 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.nigeria.model.PartnerNoticationRequest;
 import com.nigeria.model.ProductConfigModel;
+import com.nigeria.model.SdpNoticationLogsModel;
 import com.nigeria.model.SubscriptionHistoryModel;
 import com.nigeria.model.SubscriptionModel;
 import com.nigeria.model.SubscriptionRequestModel;
 import com.nigeria.model.TblBillingLogs;
 import com.nigeria.model.TblBillingSuccess;
+import com.nigeria.model.UnsubLogsModel;
 import com.nigeria.repos.PartnerNotificationRepo;
 import com.nigeria.repos.ProductConfigRepos;
+import com.nigeria.repos.SdpNoticationLogsRepos;
 import com.nigeria.repos.SubscriptionHistoryRepos;
 import com.nigeria.repos.SubscriptionRepos;
 import com.nigeria.repos.SubscriptionRequestRepos;
 import com.nigeria.repos.TblBillingLogsRepo;
 import com.nigeria.repos.TblBillingSuccessRepo;
+import com.nigeria.repos.UnsubLogsRepos;
 import com.nigeria.repos.UserProfileRepos;
 import com.nigeria.request.SubscriptionRequest;
 import com.nigeria.request.notifyReq;
@@ -42,6 +47,10 @@ public class ModelHelper {
 	private UserProfileRepos profileRepos;
 	@Autowired
 	private ProductConfigRepos configRepos;
+	@Autowired
+	private SdpNoticationLogsRepos logsRepos;
+	@Autowired
+	private UnsubLogsRepos unsubrepos;
 
 	public SubscriptionRequestModel saveSubscriptionRequest(SubscriptionRequest body, String response, String url,
 			String msisdn) {
@@ -58,6 +67,7 @@ public class ModelHelper {
 			subscriptionRequestModel.setTransactionId("0");
 			subscriptionRequestModel.setLanguage(body.getLanguage());
 			subscriptionRequestModel.setMsisdn(msisdn);
+			subscriptionRequestModel.setMeta2(body.getToken());
 			subscriptionRequestModel.setPinPushRequest(url);
 			subscriptionRequestModel.setPortalId("106");
 			subRequestRepo.save(subscriptionRequestModel);
@@ -84,7 +94,7 @@ public class ModelHelper {
 	}
 
 	public SubscriptionModel saveintosubscription(String msisdn, SubscriptionRequestModel subscriptionRequest,
-			ProductConfigModel productConfig) {
+			ProductConfigModel productConfig, int flag) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -100,6 +110,7 @@ public class ModelHelper {
 			subModel.setLanguage(subscriptionRequest.getLanguage());
 			subModel.setMappedItemtypeId(productConfig.getPricePoint());
 			subModel.setMsisdn(msisdn);
+			subModel.setMeta2(subscriptionRequest.getMeta2());
 			subModel.setPortalId(subscriptionRequest.getPortalId());
 			subModel.setPrice(productConfig.getPricePoint());
 			subModel.setPartnerTransactionId(subscriptionRequest.getPartnerTransactionId());
@@ -111,10 +122,12 @@ public class ModelHelper {
 			subModel.setSubscriptionDate(new Date());
 			subModel.setTransactionId(subscriptionRequest.getTransactionId());
 			subModel.setUserId(0L);
-//			subModel.setChargeAmount();
 			subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
-//			subModel.setChargeDate(new Date());
 			subModel.setExpiryDate(date1);
+			if (flag == 1) {
+				subModel.setChargeAmount(productConfig.getPricePoint());
+				subModel.setChargeDate(new Date());
+			}
 			subscriptionRepo.save(subModel);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +199,7 @@ public class ModelHelper {
 		return null;
 	}
 
-	private void updateSubscriptionModel(SubscriptionModel subModel, ProductConfigModel productConfig) {
+	public void updateSubscriptionModel(SubscriptionModel subModel, ProductConfigModel productConfig) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -223,9 +236,9 @@ public class ModelHelper {
 		return SubModel;
 	}
 
-	public void Unsubscription(notifyReq success) {
+	public void Unsubscription(String msisdn) {
 		// TODO Auto-generated method stub
-		SubscriptionModel subModel = subscriptionRepo.findByMsisdn(success.getMsisdn()).get();
+		SubscriptionModel subModel = subscriptionRepo.findByMsisdn(msisdn).get();
 		if (subModel != null) {
 			saveUnsubscriptionEntry(subModel);
 			profileRepos.deleteFromSubscriptionId(subModel.getId());
@@ -275,6 +288,98 @@ public class ModelHelper {
 			historyRepos.save(subHistory);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+
+	public void saveBillingLogsEntry(String msisdn, ProductConfigModel configModel, SubscriptionModel subModel,
+			String typeEvent, String errordesc, String asText) {
+		if (subModel != null) {
+			TblBillingLogs tblBillingLogs = new TblBillingLogs();
+			try {
+				tblBillingLogs.setMsisdn(msisdn);
+				tblBillingLogs.setProductId(subModel.getProductId());
+				tblBillingLogs.setPortalId(String.valueOf(subModel.getPortalId()));
+				tblBillingLogs.setServiceId(String.valueOf(subModel.getServiceId()));
+				tblBillingLogs.setTotalAmount(subModel.getAmount());
+				tblBillingLogs.setDateTime(new Date());
+				tblBillingLogs.setSubscriptionDate(subModel.getSubscriptionDate());
+				tblBillingLogs.setErrorDesc(errordesc);
+				tblBillingLogs.setBillingresponse(asText);
+				tblBillingLogs.setTypeEvent(typeEvent);
+				tblBillingLogs.setRecordStatus(1);
+				tblBillingLogs.setNoOfAttempt(1);
+				tblBillingLogs.setDailyCounter(1);
+				tblBillingLogs.setMonthlyCounter(1);
+				tblBillingLogs.setMode(subModel.getChannel());
+				billingLogsRepo.save(tblBillingLogs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		// TODO Auto-generated method stub
+
+	}
+
+	public void savetounsublog(String url, String response, String msisdn, String portalid) {
+		UnsubLogsModel unsubModel = new UnsubLogsModel();
+		unsubModel.setDatetime(new Date());
+		unsubModel.setMsisdn(msisdn);
+		unsubModel.setRequest(url);
+		unsubModel.setResponse(response);
+		unsubModel.setPortalid(portalid);
+		unsubrepos.save(unsubModel);
+	}
+
+	public void saveSdpLogs() {
+		SdpNoticationLogsModel logsModel = new SdpNoticationLogsModel();
+	}
+
+	public SubscriptionModel SubscribeUser(String msisdn, String packName, String channel, String transactionId,
+			String userStatus) {
+		// TODO Auto-generated method stub
+		ProductConfigModel productConfig = configRepos.findByCredit(packName);
+		SubscriptionModel subModel1 = subscriptionRepo.findByMsisdn(msisdn).orElse(null);
+		if (productConfig != null) {
+			if (subModel1 == null) {
+				SubscriptionModel subModel = new SubscriptionModel();
+				subModel.setMsisdn(msisdn);
+				subModel.setActiveStatus(1);
+				subModel.setAmount(productConfig.getPricePoint());
+				subModel.setChannel(channel);
+				subModel.setCurrency(productConfig.getCurrency());
+				subModel.setLanguage("en");
+				subModel.setMappedItemtypeId(productConfig.getPricePoint());
+				subModel.setPortalId("106");
+				subModel.setPrice(productConfig.getPricePoint());
+				subModel.setTransactionId(transactionId);
+				subModel.setProductId(productConfig.getProductId());
+				subModel.setProductName(productConfig.getProductName());
+				subModel.setProductType(productConfig.getPackType());
+				subModel.setServiceId(Long.valueOf(productConfig.getServiceId()));
+				subModel.setServiceName(productConfig.getServiceName());
+				subModel.setSubscriptionDate(new Date());
+				subModel.setUserId(0L);
+				subModel.setValidity(Integer.parseInt(productConfig.getValidity()));
+				if (userStatus.equalsIgnoreCase("0")) {
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(new Date());
+					cal.add(Calendar.DATE, Integer.parseInt(productConfig.getValidity()));
+					Date date1 = cal.getTime();
+					subModel.setChargeAmount(productConfig.getPricePoint());
+					subModel.setChargeDate(new Date());
+					subModel.setExpiryDate(date1);
+				}
+
+				subscriptionRepo.save(subModel);
+				return subModel;
+			} else {
+				return subModel1;
+			}
+
+		} else {
+			return subModel1;
 		}
 
 	}

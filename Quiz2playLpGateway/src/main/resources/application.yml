@@ -21,6 +21,19 @@ spring:
         uri: lb://9MOBILE-NIGERIA
         predicates:
         - Path=/redirect/**
+      - id: 9MOBILE-NIGERIA
+        uri: lb://9MOBILE-NIGERIA
+        predicates:
+        - Path=/mtn/**
+      - id: 9MOBILE-NIGERIA
+        uri: lb://9MOBILE-NIGERIA
+        predicates:
+        - Path=/nigeria/**
+
+      - id: 9MOBILE-NIGERIA
+        uri: lb://9MOBILE-NIGERIA
+        predicates:
+        - Path=/redirect/**
       - id: css-route
         uri: "lb://9MOBILE-NIGERIA/css/"
         predicates:
@@ -30,57 +43,65 @@ spring:
 #        predicates:
 #        - Path=/images/**
       - id: images-route
-        uri: "http://192.168.48.25:9094/images/" 
+        uri: "http://192.168.167.25:9094/images/" 
         predicates:
         - Path=/images/**
       - id: burkina_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/burkina/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/kenya/**   
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/stc-ksa/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/ksa/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/zain-ksa/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/mobily-ksa/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/upload/**
       - id: kenya_route
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/subscription/**
       - id: zain_iq
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/zain-iraq/**
       - id: zain_iq
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/failed/**
       - id: zain_iq
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/success/**
       - id: inaap
-        uri: http://192.168.48.25:9094/
+        uri: http://192.168.167.25:9094/
         predicates:
         - Path=/api/v1/**
+      - id: vidchat
+        uri: http://192.168.167.25:8888/
+        predicates:
+        - Path=/api/v1/vidchat/**
+      - id: burkinaHE
+        uri: http://192.168.48.25:9094/
+        predicates:
+        - Path=/**
 eureka:
   instance:
     prefer-ip-address: true
@@ -88,4 +109,4 @@ eureka:
     fetch-registry: true
     register-with-eureka: true  
     service-url:
-      defaultZone: http://192.168.48.25:5005/eureka    
+      defaultZone: http://192.168.167.25:5005/eureka    
